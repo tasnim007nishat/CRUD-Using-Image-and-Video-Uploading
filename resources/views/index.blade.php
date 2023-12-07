@@ -135,7 +135,7 @@
                     })
                 });
                 
-                //edit 
+                //edit image and video
                 $(document).on('click', '.editIcon', function(e) {
                     e.preventDefault();
                     let id = $(this).attr('id');
@@ -157,7 +157,7 @@
                     });
                 });
 
-                //update
+                //update image and video
                 $("#edit_form").submit(function(a) {
                     a.preventDefault();
                     const cnst = new FormData(this);
