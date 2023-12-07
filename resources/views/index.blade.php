@@ -151,8 +151,10 @@
                         },
                         success: function(response) {
                             $("#image").html('<img src="/public/storage/SampleImages/${response.image}" width="100" class="img-fluid img-thumbnail">');
+                            $("#image").html('<video width="100"><source src="storage/SampleVideos/${response.video}" type="video/mp4"></video>');
                             $("#upload_id").val(response.id);
                             $("#upload").val(response.image);
+                            $("#upload").val(response.video);
                         }
                     });
                 });
