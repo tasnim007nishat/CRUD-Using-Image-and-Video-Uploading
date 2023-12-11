@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SampleCrudController; 
+use App\Http\Controllers\SampleCrudController;
 //use App\Http\Controllers\AuthController;
 
 /*
@@ -23,5 +23,5 @@ Route::get('/', [SampleCrudController::class, 'index']);
 Route::post('/store', [SampleCrudController::class, 'store'])->name('store');
 Route::get('/fetchall', [SampleCrudController::class, 'fetchAll'])->name('fetchAll');
 Route::get('/edit', [SampleCrudController::class, 'edit'])->name('edit');
-Route::put('/update', [SampleCrudController::class, 'update'])->name('update');
+Route::post('/update', [SampleCrudController::class, 'update'])->name('update');
 Route::delete('/delete', [SampleCrudController::class, 'delete'])->name('delete');

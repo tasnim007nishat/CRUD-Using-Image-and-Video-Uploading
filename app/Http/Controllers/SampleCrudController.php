@@ -49,7 +49,7 @@ class SampleCrudController extends Controller
         //image
         $file_image = $request->file('image');
         $fileName_image = time() . '.' . $file_image->getClientOriginalExtension();
-        $file_image->storeAs('public/SampleImages', $fileName_image); 
+        $file_image->storeAs('public/SampleImages', $fileName_image);
 
         //video
         $file_video = $request->file('video');
@@ -66,9 +66,10 @@ class SampleCrudController extends Controller
     //edit images ajax request
     public function edit(Request $request) {
         $id = $request->id;
-        $img = Sample_Crud::find($id);
-        return response() -> json($img); 
+        $sample = Sample_Crud::find($id);
+        return response() -> json($sample);
         //return view('index');
+        // dd($id);
     }
 
     //updating images ajax request
@@ -92,9 +93,9 @@ class SampleCrudController extends Controller
                 $fileName_video = $request->video;
             }
 
-            $sampleData = ['image' => $fileName_image, 'video' => $fileName_video];
-            
-            $image->update($sampleData);
+            $sampleData = ['images' => $request->image, 'videos' => $request->video];
+
+            $upload->update($sampleData);
             return response() -> json([
                 'status' => 200,
             ]);
@@ -107,8 +108,7 @@ class SampleCrudController extends Controller
         $sample = Sample_Crud::find($id);
         if (Storage::delete('public/SampleImages/' || 'public/SampleVideos/' . $sample->image || $sample->video)) {
             Sample_Crud::destroy($id);
-        } 
+        }
     }
 }
 
- 

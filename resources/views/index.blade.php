@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Laravel 10 CRUD With Image and Video Upload using jQuery Ajax with SweetAlert and DataTables</title>
+        <title>CRUD With Image and Video Upload using jQuery Ajax with SweetAlert and DataTables</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
@@ -15,12 +15,12 @@
         {{-- Header of the Page --}}
         <div class="container">
             <div class="row my-5">
-               <div class="col-lg-12">
+               <div class="col-lg-12 text-center">
                 <h2>Image and Video Uploading</h2>
-                <div class="card shadow">
-                    <div class="card-header d-flex justify-content-end align-items-end">
+                <div class="card shadow mt-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                     {{-- <div class="card-header d-flex justify-content-around"> --}}
-                        {{-- <h3>Upload Image and Video</h3> --}}
+                        <h3 text-dark>Upload Image and Video</h3>
                         {{-- <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addUploadModal"><i class="bi-plus-circle me-2"></i>Add Image</button>
                         <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addVideoModal"><i class="bi-plus-circle me-2"></i>Add Video</button> --}}
                         <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addUploadModal"><i class="bi-plus-circle me-2"></i>Upload image and video</button>
@@ -75,7 +75,8 @@
                         @csrf
                         {{-- @method('PUT') --}}
                         <input type="hidden" name="upload_id" id="upload_id">
-                        <input type="hidden" name="upload" id="upload">
+                        <input type="hidden" name="upload_image" id="upload_image">
+                        <input type="hidden" name="upload_video" id="upload_video">
                         <div class="modal-body p-4 bg-light">
                             <div class="my-2">
                                 <label for="image">Select Image</label>
@@ -94,14 +95,14 @@
                 </div>
             </div>
         </div>
-        
+
         <script src=" https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js "></script>
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             $(function() {
-                //add images 
+                //add images
                 $("#add_form").submit(function(a) {
                     a.preventDefault();
                     const cnst = new FormData(this);
@@ -134,7 +135,7 @@
                         }
                     })
                 });
-                
+
                 //edit image and video
                 $(document).on('click', '.editIcon', function(e) {
                     e.preventDefault();
@@ -150,11 +151,11 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            $("#image").html('<img src="/public/storage/SampleImages/${response.image}" width="100" class="img-fluid img-thumbnail">');
-                            $("#image").html('<video width="100"><source src="storage/SampleVideos/${response.video}" type="video/mp4"></video>');
+                            $("#image").html('<img src="storage/SampleImages/${response.image}" width="100" class="img-fluid img-thumbnail">');
+                            $("#video").html('<video width="100"><source src="storage/SampleVideos/${response.video}" type="video/mp4"></video>');
                             $("#upload_id").val(response.id);
-                            $("#upload").val(response.image);
-                            $("#upload").val(response.video);
+                            $("#upload_image").val(response.image);
+                            $("#upload_video").val(response.video);
                         }
                     });
                 });
@@ -165,11 +166,11 @@
                     const cnst = new FormData(this);
                     $("#edit_btn").text('Updating');
                     $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
+                        // headers: {
+                        //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        // },
                         url: '{{ route('update') }}',
-                        method: 'put',
+                        method: 'post',
                         data: cnst,
                         cache: false,
                         contentType: false,
@@ -179,7 +180,7 @@
                             if (response.status == 200) {
                                 Swal.fire(
                                     'Updated!',
-                                    'Image and Video Successfully Updated!',
+                                    'Successfully Updated!',
                                     'success'
                                 )
                                 fetchAllDatas();
@@ -197,7 +198,7 @@
                     let id = $(this).attr('id');
                     let csrf = '{{ csrf_token() }}';
                     Swal.fire({
-                        title: 'Do you want to delete this image?',
+                        title: 'Do you want to delete?',
                         text: "It will be permanently deleted!",
                         icon: 'warning',
                         showCancelButton: true,
@@ -217,7 +218,7 @@
                                     console.log(response);
                                     Swal.fire(
                                         'Deleted!',
-                                        'Image has been deleted.',
+                                        'All data have been deleted.',
                                         'success'
                                     )
                                     fetchAllDatas();
@@ -227,7 +228,7 @@
                     })
                 });
 
-                //fetch all datas 
+                //fetch all datas
                 fetchAllDatas();
                 function fetchAllDatas() {
                     //alert("Show all data");
@@ -247,4 +248,3 @@
         </script>
     </body>
 </html>
-    
