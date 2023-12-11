@@ -73,34 +73,68 @@ class SampleCrudController extends Controller
     }
 
     //updating images ajax request
+    // public function update(Request $request) {
+    //     $fileName_image = '';
+    //     $fileName_video = '';
+    //     $upload = Sample_Crud::find($request->upload_id);
+    //     if($request->hasFile('image') || $request->hasFile('video')) {
+    //         $file_image = $request->file('image');
+    //         $fileName_image = time() . '.' . $file_image->getClientOriginalExtension();
+    //         $file_image->storeAs('storage/SampleImages', $fileName_image);
+
+    //         $file_video = $request->file('video');
+    //         $fileName_video = time() . '.' . $file_video->getClientOriginalExtension();
+    //         $file_video->storeAs('storage/SampleVideos', $fileName_video);
+
+    //         if($upload->image || $upload->video) {
+    //             Storage::delete('storage/SampleImages' || 'storage/SampleVideos', $upload->image || $upload->video);
+    //         } else {
+    //             $fileName_image = $request->image;
+    //             $fileName_video = $request->video;
+    //         }
+
+    //         $sampleData = ['images' => $request->image, 'videos' => $request->video];
+
+    //         $upload->update($sampleData);
+    //         return response() -> json([
+    //             'status' => 200,
+    //         ]);
+    //     }
+    // }
+
     public function update(Request $request) {
-        $fileName_image = '';
-        $fileName_video = '';
+		$fileName_image = '';
+		$fileName_video = '';
         $upload = Sample_Crud::find($request->upload_id);
-        if($request->hasFile('image') || $request->hasFile('video')) {
-            $file_image = $request->file('image');
-            $fileName_image = time() . '.' . $file_image->getClientOriginalExtension();
-            $file_image->storeAs('storage/SampleImages', $fileName_image);
+		if ($request->hasFile('image')) {
+			$file_image = $request->file('image');
+			$fileName_image = time() . '.' . $file_image->getClientOriginalExtension();
+			$file_image->storeAs('public/storage/SampleImages', $fileName_image);
+			if ($upload->image) {
+				Storage::delete('public/storage/SampleImages/' . $upload->image);
+			}
+		// } else {
+			$fileName_image = $request->image;
+		}
 
-            $file_video = $request->file('video');
-            $fileName_video = time() . '.' . $file_video->getClientOriginalExtension();
-            $file_video->storeAs('storage/SampleVideos', $fileName_video);
+        if ($request->hasFile('video')) {
+			$file_video = $request->file('video');
+			$fileName_video = time() . '.' . $file_video->getClientOriginalExtension();
+			$file_video->storeAs('public/storage/SampleVideos', $fileName_video);
+			if ($upload->video) {
+				Storage::delete('public/storage/SampleVideos/' . $upload->video);
+			}
+		// } else {
+			$fileName_video = $request->video;
+		}
 
-            if($upload->image || $upload->video) {
-                Storage::delete('storage/SampleImages' || 'storage/SampleVideos', $upload->image || $upload->video);
-            } else {
-                $fileName_image = $request->image;
-                $fileName_video = $request->video;
-            }
+		$uploadData = ['image' => $fileName_image, 'video' => $fileName_video];
 
-            $sampleData = ['images' => $request->image, 'videos' => $request->video];
-
-            $upload->update($sampleData);
-            return response() -> json([
-                'status' => 200,
-            ]);
-        }
-    }
+		$upload->update($uploadData);
+		return response()->json([
+			'status' => 200,
+		]);
+	}
 
     // delete an employee ajax request
     public function delete(Request $request) {
